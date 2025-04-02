@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <pcap.h>
 #include <arpa/inet.h>
-#include <netinet/ether.h>
-#include <netinet/ip.h>
-#include <netinet/tcp.h>
+#include <netinet/ether.h> // Etherent header
+#include <netinet/ip.h> // IP header
+#include <netinet/tcp.h> // TCP header
 
 void packet_handler(u_char *user_data, const struct pcap_pkthdr *pkthdr, const u_char *packet) {
     struct ether_header *eth_header = (struct ether_header *)packet;
@@ -31,10 +31,10 @@ void packet_handler(u_char *user_data, const struct pcap_pkthdr *pkthdr, const u
             printf("TCP Header\n");
             printf("  Source Port: %u\n", src_port);
             printf("  Destination Port: %u\n", dst_port);
-            printf("TCP Data\n");
-            for (int i = 0; i < tcp_data_length; i++) {
-                printf("%c", packet[sizeof(struct ether_header) + ip_header->ip_hl * 4 + tcp_header->th_off * 4 + i]);
-            }
+            printf("TCP Data (Hex):\n");
+                for (int i = 0; i < tcp_data_length; i++) {
+                    printf("%02X ", packet[sizeof(struct ether_header) + ip_header->ip_hl * 4 + tcp_header->th_off * 4 + i]);
+                }
             printf("\n\n");
         }
     }
